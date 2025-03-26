@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime
-from price_tracker import read_price_data
+from price_tracker import read_price_data, get_price_change
 
 @pytest.fixture
 def sample_file(tmp_path):
@@ -19,3 +19,16 @@ def test_read_price_data(sample_file):
     data = read_price_data(sample_file)
     assert len(data) == 4
     assert data[0] == ("apple", datetime(2025, 2, 25), 10.5)
+
+@pytest.mark.parametrize(
+    "product_name, expected_result",
+    [
+        ("apple", (10.5, 12.0)),  # Зміна ціни за місяць
+        ("banana", None),         # Недостатньо даних
+        ("orange", None),         # Товару немає
+    ]
+)
+def test_get_price_change(sample_file, product_name, expected_result):
+    """Тестування функції get_price_change з параметризацією."""
+    result = get_price_change(product_name, sample_file, days=30)
+    assert result == expected_result
