@@ -12,7 +12,11 @@ def read_price_data(file_path: str) -> list:
     return price_data
 
 
-def get_price_change(product_name: str, file_path: str, days: int = 30) -> tuple[float, float] | None:
+def get_price_change(
+    product_name: str,
+    file_path: str,
+    days: int = 30
+) -> tuple[float, float] | None:
     """Повертає початкову та кінцеву ціну товару за останні 'days' днів.
     """
     price_data = read_price_data(file_path)
